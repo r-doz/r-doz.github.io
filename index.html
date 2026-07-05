@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Romina Doz — Applied Data Science & AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12282C;
+    --paper:#F1F3EE;
+    --paper-dim:#E7EAE2;
+    --teal:#1E5257;
+    --teal-deep:#0B2E31;
+    --coral:#E8593F;
+    --gold:#C79A3C;
+    --line: rgba(18,40,44,0.14);
+    --line-strong: rgba(18,40,44,0.28);
+    --maxw: 1080px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit;}
+  .mono{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    font-size:0.72rem;
+  }
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--coral);
+    outline-offset:3px;
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(241,243,238,0.86);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-top:16px; padding-bottom:16px;
+  }
+  .nav-name{font-family:'Fraunces',serif; font-size:1.05rem; font-weight:500;}
+  .nav-links{display:flex; gap:28px; list-style:none; margin:0; padding:0;}
+  .nav-links a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase;
+    text-decoration:none; color:var(--teal-deep); opacity:0.75;
+    transition:opacity .2s;
+  }
+  .nav-links a:hover{opacity:1;}
+  .nav-toggle{display:none;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:96px 0 72px;
+    overflow:hidden;
+  }
+  .hero .wrap{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:48px;
+    align-items:center;
+  }
+  .eyebrow{color:var(--teal); opacity:0.85; display:block; margin-bottom:22px;}
+  .hero h1{
+    font-size:clamp(2rem, 4.4vw, 3.4rem);
+    line-height:1.12;
+    color:var(--teal-deep);
+  }
+  .hero h1 em, .hero p.sub em{
+    font-style:italic; color:var(--coral);
+  }
+  .hero p.sub{
+    max-width:46ch;
+    margin-top:24px;
+    font-size:1.08rem;
+    color:rgba(18,40,44,0.78);
+  }
+  .hero-ctas{margin-top:34px; display:flex; gap:16px; flex-wrap:wrap;}
+  .btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.75rem; letter-spacing:0.05em; text-transform:uppercase;
+    padding:13px 22px;
+    border-radius:2px;
+    text-decoration:none;
+    display:inline-flex; align-items:center; gap:8px;
+    transition:transform .15s ease, background .15s ease;
+    border:1px solid var(--teal-deep);
+  }
+  .btn-solid{background:var(--teal-deep); color:var(--paper);}
+  .btn-solid:hover{background:var(--coral); border-color:var(--coral); transform:translateY(-1px);}
+  .btn-ghost{background:transparent; color:var(--teal-deep);}
+  .btn-ghost:hover{border-color:var(--coral); color:var(--coral); transform:translateY(-1px);}
+
+  .hero-canvas-wrap{
+    position:relative;
+    aspect-ratio:1/1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  #posterior{width:100%; height:100%; display:block;}
+  .canvas-caption{
+    position:absolute; bottom:-6px; left:0; right:0; text-align:center;
+    color:var(--teal); opacity:0.55;
+  }
+
+  /* ---------- SECTION SCAFFOLD ---------- */
+  section{padding:64px 0;}
+  .section-head{
+    display:flex; align-items:baseline; gap:18px; margin-bottom:40px;
+    border-bottom:1px solid var(--line-strong);
+    padding-bottom:18px;
+  }
+  .section-head .mono{color:var(--coral);}
+  .section-head h2{font-size:1.7rem; color:var(--teal-deep);}
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{
+    display:grid; grid-template-columns:0.9fr 1.1fr; gap:56px;
+  }
+  .about-grid p{margin:0 0 18px; color:rgba(18,40,44,0.85);}
+  .timeline{list-style:none; margin:0; padding:0;}
+  .timeline li{
+    display:grid; grid-template-columns:88px 1fr; gap:16px;
+    padding:14px 0; border-top:1px solid var(--line);
+  }
+  .timeline li:first-child{border-top:none;}
+  .timeline .date{font-family:'IBM Plex Mono',monospace; font-size:0.75rem; color:var(--teal); padding-top:2px;}
+  .timeline .what b{display:block; font-family:'Fraunces',serif; font-weight:500; font-size:1.02rem; color:var(--teal-deep);}
+  .timeline .what span{color:rgba(18,40,44,0.7); font-size:0.93rem;}
+
+  /* ---------- PUBLICATIONS ---------- */
+  .pub{
+    display:grid; grid-template-columns:64px 1fr auto; gap:20px; align-items:start;
+    padding:22px 0; border-top:1px solid var(--line);
+  }
+  .pub:first-of-type{border-top:none;}
+  .pub .tag{
+    font-family:'IBM Plex Mono',monospace; font-size:0.7rem; color:var(--paper);
+    background:var(--teal); padding:4px 8px; border-radius:2px; text-align:center;
+    white-space:nowrap; height:fit-content;
+  }
+  .pub .tag.upcoming{background:var(--coral);}
+  .pub h3{font-size:1.12rem; color:var(--teal-deep); font-weight:500;}
+  .pub .authors{color:rgba(18,40,44,0.65); font-size:0.92rem; margin-top:6px;}
+  .pub .venue{
+    font-family:'IBM Plex Mono',monospace; font-size:0.72rem; color:var(--teal);
+    align-self:center; text-align:right; white-space:nowrap;
+  }
+
+  /* ---------- NEWS ---------- */
+  .news-list{list-style:none; margin:0; padding:0;}
+  .news-item{
+    display:grid; grid-template-columns:100px 20px 1fr; gap:0;
+    padding:0 0 28px;
+  }
+  .news-item .date{font-family:'IBM Plex Mono',monospace; font-size:0.75rem; color:var(--teal); padding-top:3px;}
+  .news-item .rail{display:flex; flex-direction:column; align-items:center;}
+  .news-item .dot{width:8px; height:8px; border-radius:50%; background:var(--coral); margin-top:6px; flex-shrink:0;}
+  .news-item .stem{flex:1; width:1px; background:var(--line-strong); margin-top:4px;}
+  .news-item:last-child .stem{display:none;}
+  .news-item .body b{display:block; font-family:'Fraunces',serif; font-size:1.05rem; font-weight:500; color:var(--teal-deep);}
+  .news-item .body span{color:rgba(18,40,44,0.72); font-size:0.93rem;}
+
+  /* ---------- BEYOND ---------- */
+  .beyond-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .beyond-card{
+    background:var(--paper-dim); border:1px solid var(--line);
+    padding:26px 22px; border-radius:3px;
+  }
+  .beyond-card .mono{color:var(--coral); display:block; margin-bottom:14px;}
+  .beyond-card h3{font-size:1.08rem; color:var(--teal-deep); margin-bottom:8px;}
+  .beyond-card p{margin:0; font-size:0.92rem; color:rgba(18,40,44,0.72);}
+
+  .strengths{display:flex; flex-wrap:wrap; gap:10px; margin-top:16px;}
+  .pill{
+    font-family:'IBM Plex Mono',monospace; font-size:0.72rem;
+    border:1px solid var(--line-strong); padding:7px 13px; border-radius:20px;
+    color:var(--teal-deep);
+  }
+
+  /* ---------- CONTACT ---------- */
+  .contact{
+    background:var(--teal-deep); color:var(--paper);
+    padding:70px 0; margin-top:20px;
+  }
+  .contact h2{color:var(--paper); font-size:1.9rem; max-width:18ch;}
+  .contact .wrap{display:grid; grid-template-columns:1.3fr 1fr; gap:40px; align-items:end;}
+  .contact-links{display:flex; flex-direction:column; gap:12px;}
+  .contact-links a{
+    text-decoration:none; font-size:0.95rem; color:var(--paper);
+    display:flex; justify-content:space-between; border-bottom:1px solid rgba(241,243,238,0.2);
+    padding-bottom:10px; opacity:0.9;
+  }
+  .contact-links a:hover{opacity:1; color:var(--gold);}
+  .contact-links .mono{color:rgba(241,243,238,0.55);}
+
+  footer{
+    padding:26px 0 40px; text-align:center;
+    color:rgba(18,40,44,0.45); font-size:0.78rem;
+  }
+
+  @media (max-width:760px){
+    .hero .wrap{grid-template-columns:1fr; gap:36px;}
+    .hero-canvas-wrap{order:-1; max-width:280px; margin:0 auto;}
+    .about-grid{grid-template-columns:1fr;}
+    .pub{grid-template-columns:1fr; gap:8px;}
+    .pub .venue{text-align:left;}
+    .beyond-grid{grid-template-columns:1fr;}
+    .contact .wrap{grid-template-columns:1fr;}
+    .nav-links{display:none;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="nav-name">Romina Doz</div>
+    <ul class="nav-links">
+      <li><a href="#news">News</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#beyond">Beyond</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="mono eyebrow">Trieste, Italy — Applied Data Science &amp; AI</span>
+      <h1>Since I was a child, my dream was to become <em>a scientist.</em></h1>
+      <p class="sub">Now I'm (almost!) a PhD in Applied Data Science and Artificial Intelligence — so I suppose that dream came true. I work on probabilistic programming, Bayesian methods, and causal inference: teaching machines to reason honestly about what they don't know. Along the way I've also been learning how to actually run a business, through AIDEN. Next dream: <em>build something of my own.</em></p>
+      <div class="hero-ctas">
+        <a class="btn btn-solid" href="cv.pdf" target="_blank" rel="noopener">Download CV</a>
+        <a class="btn btn-ghost" href="#research">See publications</a>
+      </div>
+    </div>
+    <div class="hero-canvas-wrap">
+      <canvas id="posterior"></canvas>
+      <span class="mono canvas-caption">100 samples → posterior</span>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="mono">01 — News</span>
+      <h2>Recent updates</h2>
+    </div>
+    <ul class="news-list">
+      <li class="news-item">
+        <div class="date">2026</div>
+        <div class="rail"><div class="dot"></div><div class="stem"></div></div>
+        <div class="body"><b>Admitted to Women2Invest</b><span>Joining the program to build fundraising and investment skills as I move toward launching my own venture.</span></div>
+      </li>
+      <li class="news-item">
+        <div class="date">2026</div>
+        <div class="rail"><div class="dot"></div><div class="stem"></div></div>
+        <div class="body"><b>Paper accepted at PPSN 2026</b><span>"Inferring Structural Causal Models from Data with Grammatical Evolution" — presenting in Trento.</span></div>
+      </li>
+      <li class="news-item">
+        <div class="date">2026</div>
+        <div class="rail"><div class="dot"></div><div class="stem"></div></div>
+        <div class="body"><b>DeGAS accepted at TACAS 2026</b><span>Our gradient-based approach to optimizing probabilistic programs without sampling.</span></div>
+      </li>
+      <li class="news-item">
+        <div class="date">2025</div>
+        <div class="rail"><div class="dot"></div><div class="stem"></div></div>
+        <div class="body"><b>Selected for the Trieste–Osaka Innovation Gateway</b><span>Business &amp; Technical Mission to Japan, awarded by the Innovators Community Lab (ICL of UNITS).</span></div>
+      </li>
+      <li class="news-item">
+        <div class="date">2025</div>
+        <div class="rail"><div class="dot"></div><div class="stem"></div></div>
+        <div class="body"><b>Paper accepted at GECCO 2025</b><span>"Evolutionary Synthesis of Probabilistic Programs."</span></div>
+      </li>
+      <li class="news-item">
+        <div class="date">2024</div>
+        <div class="rail"><div class="dot"></div></div>
+        <div class="body"><b>First paper published — ISoLA 2024</b><span>"Towards a Probabilistic Programming Approach to Analyse Collective Adaptive Systems."</span></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="mono">02 — About</span>
+      <h2>From physics to probabilistic programming</h2>
+    </div>
+    <div class="about-grid">
+      <div>
+        <p>I started in physics, drawn to the idea that the world could be described precisely. Somewhere between a bachelor's degree and a master's thesis on stochastic population models for exploited marine species, I fell for a messier and more honest kind of precision: models that admit what they don't know.</p>
+        <p>That's what my PhD is about. I work on probabilistic programming, Bayesian neural networks, causal inference, evolutionary computation, and formal verification — usually all four at once, on the same problem. I'm part of the team behind <b>DeGAS</b>, a gradient-based approach to optimizing probabilistic programs without sampling, and I spend a lot of my time thinking about how to make uncertainty something you can compute with, not just talk around.</p>
+        <p>In 2025 I spent three months as a visiting researcher at TU Wien's Trustworthy Cyber-Physical Systems group. I'm based in Trieste — a city that, appropriately, sits right on the line between two worlds.</p>
+      </div>
+      <ul class="timeline">
+        <li><div class="date">2026</div><div class="what"><b>PPSN 2026 (to appear)</b><span>Presenting "Inferring Structural Causal Models from Data with Grammatical Evolution" in Trento</span></div></li>
+        <li><div class="date">2023–now</div><div class="what"><b>PhD, Applied Data Science &amp; AI</b><span>Università degli Studi di Trieste — probabilistic programming, BNNs, causal inference, formal verification</span></div></li>
+        <li><div class="date">2025</div><div class="what"><b>Visiting researcher</b><span>TrustCPS group, TU Wien — 3 months</span></div></li>
+        <li><div class="date">2020–2023</div><div class="what"><b>MSc, Data Science &amp; Scientific Computing</b><span>Università degli Studi di Trieste — 110/110 cum laude</span></div></li>
+        <li><div class="date">2014–2019</div><div class="what"><b>BSc, Physics</b><span>Università degli Studi di Trieste</span></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="research">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="mono">03 — Research</span>
+      <h2>Publications</h2>
+    </div>
+
+    <div class="pub">
+      <span class="tag upcoming">2026</span>
+      <div>
+        <h3>Inferring Structural Causal Models from Data with Grammatical Evolution</h3>
+        <div class="authors">Doz, Randone, Bortolussi, Medvet</div>
+      </div>
+      <div class="venue">PPSN 2026<br>(to appear)</div>
+    </div>
+
+    <div class="pub">
+      <span class="tag">2026</span>
+      <div>
+        <h3>DeGAS: Gradient-Based Optimization of Probabilistic Programs without Sampling</h3>
+        <div class="authors">Randone, Doz, Tribastone, Bortolussi</div>
+      </div>
+      <div class="venue">TACAS 2026</div>
+    </div>
+
+    <div class="pub">
+      <span class="tag">2025</span>
+      <div>
+        <h3>Evolutionary Synthesis of Probabilistic Programs</h3>
+        <div class="authors">Doz, Randone, Medvet, Bortolussi</div>
+      </div>
+      <div class="venue">GECCO 2025</div>
+    </div>
+
+    <div class="pub">
+      <span class="tag">2024</span>
+      <div>
+        <h3>Towards a Probabilistic Programming Approach to Analyse Collective Adaptive Systems</h3>
+        <div class="authors">Randone, Doz, Cairoli, Bortolussi</div>
+      </div>
+      <div class="venue">ISoLA 2024</div>
+    </div>
+
+  </div>
+</section>
+
+<section id="beyond">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="mono">04 — Beyond research</span>
+      <h2>What defines me</h2>
+    </div>
+    <div class="beyond-grid">
+      <div class="beyond-card">
+        <span class="mono">Discipline</span>
+        <h3>Taekwondo black belt</h3>
+        <p>Silver medallist at the Italian Championship. A different kind of research: years of small, repeated corrections until something becomes instinct.</p>
+      </div>
+      <div class="beyond-card">
+        <span class="mono">Entrepreneurship</span>
+        <h3>Japan business mission</h3>
+        <p>Selected for the Trieste–Osaka Innovation Gateway, a business &amp; technical mission run by the Innovators Community Lab — a first step toward turning "next dream" into a plan.</p>
+      </div>
+      <div class="beyond-card">
+        <span class="mono">Roots</span>
+        <h3>The sea, still</h3>
+        <p>My master's thesis modelled exploited marine species along the Adriatic. Trieste's relationship with the sea shows up in my work more often than you'd expect.</p>
+      </div>
+    </div>
+    <div class="strengths">
+      <span class="pill">Python</span>
+      <span class="pill">Probabilistic Modeling</span>
+      <span class="pill">Machine Learning &amp; Deep Learning</span>
+      <span class="pill">Causal Inference</span>
+      <span class="pill">Explainable AI</span>
+      <span class="pill">Software Engineering for Research</span>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div>
+      <span class="mono" style="color:rgba(241,243,238,0.6);">05 — Get in touch</span>
+      <h2>Let's talk about uncertainty, causality, or the leap into building something new.</h2>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:romina.ma95@gmail.com"><span>Email</span><span class="mono">romina.ma95@gmail.com</span></a>
+      <a href="https://www.linkedin.com/in/romina-doz" target="_blank" rel="noopener"><span>LinkedIn</span><span class="mono">/in/romina-doz</span></a>
+      <a href="cv.pdf" target="_blank" rel="noopener"><span>Curriculum Vitae</span><span class="mono">Download PDF ↓</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Romina Doz — Trieste, Italy · Built with a little help from a posterior distribution</div>
+</footer>
+
+<script>
+// Reduced motion check
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const canvas = document.getElementById('posterior');
+const ctx = canvas.getContext('2d');
+
+function sizeCanvas(){
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return rect;
+}
+let rect = sizeCanvas();
+window.addEventListener('resize', () => { rect = sizeCanvas(); layout(); });
+
+const N = 90;
+const inkTeal = '#1E5257';
+const coral = '#E8593F';
+const gold = '#C79A3C';
+
+function gaussianTarget(i, w, h){
+  // map index to x position along a bell curve, y = curve height (samples resting under curve)
+  const t = (i / (N-1)) * 2 - 1; // -1..1, but we bias toward gaussian spread using inverse erf-ish jitter
+  const x = w*0.5 + t * w * 0.42 + (Math.random()-0.5)*6;
+  const sigma = 0.34;
+  const gy = Math.exp(-(t*t)/(2*sigma*sigma));
+  const y = h*0.82 - gy * h*0.62 - Math.random()*10;
+  return {x, y};
+}
+
+let points = [];
+function layout(){
+  const w = rect.width, h = rect.height;
+  points = [];
+  for(let i=0;i<N;i++){
+    points.push({
+      // start scattered randomly (the "prior")
+      x: Math.random()*w,
+      y: Math.random()*h,
+      tx: 0, ty: 0,
+      r: 2 + Math.random()*2.2,
+      c: Math.random() < 0.14 ? coral : (Math.random() < 0.3 ? gold : inkTeal),
+      delay: Math.random()*700,
+      settled:false,
+      phase: Math.random()*Math.PI*2
+    });
+  }
+  const order = [...points.keys()].sort(()=>Math.random()-0.5);
+  order.forEach((idx,i)=>{
+    const target = gaussianTarget(i, w, h);
+    points[idx].tx = target.x;
+    points[idx].ty = target.y;
+  });
+}
+layout();
+
+let start = null;
+function frame(ts){
+  if(!start) start = ts;
+  const elapsed = ts - start;
+  const w = rect.width, h = rect.height;
+  ctx.clearRect(0,0,w,h);
+
+  // baseline axis
+  ctx.strokeStyle = 'rgba(18,40,44,0.15)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(w*0.06, h*0.82);
+  ctx.lineTo(w*0.94, h*0.82);
+  ctx.stroke();
+
+  points.forEach(p=>{
+    let progress = prefersReduced ? 1 : Math.min(1, Math.max(0, (elapsed - p.delay) / 1400));
+    // ease out cubic
+    const e = 1 - Math.pow(1-progress, 3);
+    const cx = p.x + (p.tx - p.x) * e;
+    const cy = p.y + (p.ty - p.y) * e;
+    let drawX = cx, drawY = cy;
+    if(progress >= 1 && !prefersReduced){
+      drawY = cy + Math.sin(elapsed/1000 + p.phase) * 1.6;
+    }
+    ctx.beginPath();
+    ctx.arc(drawX, drawY, p.r, 0, Math.PI*2);
+    ctx.fillStyle = p.c;
+    ctx.globalAlpha = 0.85;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  });
+
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+
+</body>
+</html>
